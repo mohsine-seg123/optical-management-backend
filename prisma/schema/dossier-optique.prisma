@@ -1,0 +1,60 @@
+model DossierOptique {
+  id                  Int       @id @default(autoincrement())
+  numeroDossier       String    @unique @db.VarChar(20) @map("numero_dossier")
+  dateCreation        DateTime  @map("date_creation") @db.Date
+  dateDernierExamen   DateTime? @map("date_dernier_examen") @db.Date
+  observations        String?   @db.Text
+
+  clientId            Int       @unique @map("id_client")
+  client              Client    @relation(fields: [clientId], references: [id])
+
+  ordonnances         Ordonnance[]
+  examens             ExamenVue[]
+
+  @@map("dossier_optique")
+}
+
+
+model Ordonnance {
+  id                Int      @id @default(autoincrement())
+  dateOrdonnance    DateTime @map("date_ordonnance") @db.Date
+  medecin           String   @db.VarChar(100)
+  dateExpiration    DateTime @map("date_expiration") @db.Date
+  scanUrl           String?  @db.VarChar(255) @map("scan_url")
+
+  dossierId         Int      @map("id_dossier")
+  dossier           DossierOptique @relation(fields: [dossierId], references: [id])
+
+  @@map("ordonnance")
+}
+
+model ExamenVue {
+  id            Int      @id @default(autoincrement())
+  dateExamen    DateTime @map("date_examen") @db.Date
+  sphereOd      Decimal  @db.Decimal(4, 2) @map("sphere_od")
+  cylindreOd    Decimal  @db.Decimal(4, 2) @map("cylindre_od")
+  axeOd         Int      @map("axe_od")
+  additionOd    Decimal  @db.Decimal(4, 2) @map("addition_od")
+  sphereOg      Decimal  @db.Decimal(4, 2) @map("sphere_og")
+  cylindreOg    Decimal  @db.Decimal(4, 2) @map("cylindre_og")
+  axeOg         Int      @map("axe_og")
+  additionOg    Decimal  @db.Decimal(4, 2) @map("addition_og")
+
+  dossierId     Int      @map("id_dossier")
+  dossier       DossierOptique @relation(fields: [dossierId], references: [id])
+
+  @@map("examen_vue")
+}
+
+model Rappel {
+  id          Int      @id @default(autoincrement())
+  typeRappel  String   @db.VarChar(30) @map("type_rappel")
+  datePrevue  DateTime @map("date_prevue") @db.Date
+  statut      String   @db.VarChar(20)
+  canal       String   @db.VarChar(20)
+
+  clientId    Int      @map("id_client")
+  client      Client   @relation(fields: [clientId], references: [id])
+
+  @@map("rappel")
+}

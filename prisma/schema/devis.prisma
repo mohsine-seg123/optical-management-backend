@@ -1,0 +1,31 @@
+model Devis {
+  id            Int      @id @default(autoincrement())
+  dateDevis     DateTime @map("date_devis") @db.Date
+  montantTotal  Decimal  @db.Decimal(10, 2) @map("montant_total")
+  statut        String   @db.VarChar(20)
+
+  clientId      Int      @map("id_client")
+  client        Client   @relation(fields: [clientId], references: [id])
+
+  utilisateurId Int      @map("id_utilisateur")
+  utilisateur   Utilisateur @relation(fields: [utilisateurId], references: [id])
+
+  lignes        LigneDevis[]
+  vente         Vente?
+
+  @@map("devis")
+}
+
+model LigneDevis {
+  produitId    Int      @map("id_produit")
+  devisId      Int      @map("id_devis")
+  quantite     Int
+  prixUnitaire Decimal  @db.Decimal(10, 2) @map("prix_unitaire")
+  remise       Decimal  @db.Decimal(5, 2)
+
+  produit      Produit @relation(fields: [produitId], references: [id])
+  devis        Devis   @relation(fields: [devisId], references: [id])
+
+  @@id([produitId, devisId])
+  @@map("ligne_devis")
+}

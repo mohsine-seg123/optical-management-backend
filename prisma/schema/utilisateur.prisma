@@ -1,0 +1,14 @@
+model Utilisateur {
+  id          Int      @id @default(autoincrement())
+  nom         String   @db.VarChar(50)
+  prenom      String   @db.VarChar(50)
+  email       String   @unique @db.VarChar(100)
+  motDePasse  String   @db.VarChar(255) @map("mot_de_passe")
+  role        String   @db.VarChar(20)
+
+  devis       Devis[]
+  ventes      Vente[]
+
+  @@map("utilisateur")
+}
+

@@ -1,0 +1,33 @@
+model Client{
+    id        Int      @id @default(autoincrement())
+    nom       String   @db.VarChar(50)
+    prenom    String   @db.VarChar(50)
+    telephone String   @db.VarChar(20)
+    email     String   @unique @db.VarChar(100)
+    adresse   String   @db.VarChar(255)
+    dateNaissance DateTime @map("date_naissance")
+
+    mutuelleId Int? @map("mutuelle_id")
+    mutuelle   Mutuelle? @relation(fields: [mutuelleId], references: [id])
+
+    dossier   DossierOptique?
+    rappels   Rappel[]
+    devis     Devis[]
+    ventes    Vente[]
+
+    @@map("client")
+}
+
+
+model Mutuelle {
+    id       Int     @id @default(autoincrement())
+    nom      String  @db.VarChar(50)
+    tauxRemboursement  Decimal  @db.Decimal(5,2) @map("taux_remboursement")
+    telephone     String     @db.VarChar(20)
+    email         String     @db.VarChar(50)
+
+    client Client[]
+    facture Facture[]
+
+    @@map("mutuelle")
+}

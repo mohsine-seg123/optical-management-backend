@@ -1,0 +1,25 @@
+model BonLivraison {
+  id             Int      @id @default(autoincrement())
+  numeroBon      String   @unique @db.VarChar(50) @map("numero_bon")
+  dateReception  DateTime @map("date_reception") @db.Date
+
+  fournisseurId  Int      @map("id_fournisseur")
+  fournisseur    Fournisseur @relation(fields: [fournisseurId], references: [id])
+
+  lignes         LigneBonLivraison[]
+
+  @@map("bon_livraison")
+}
+
+model LigneBonLivraison {
+  produitId  Int      @map("id_produit")
+  bonId      Int      @map("id_bon")
+  quantite   Int
+  prixAchat  Decimal  @db.Decimal(10, 2) @map("prix_achat")
+
+  produit    Produit      @relation(fields: [produitId], references: [id])
+  bon        BonLivraison @relation(fields: [bonId], references: [id])
+
+  @@id([produitId, bonId])
+  @@map("ligne_bon_livraison")
+}

@@ -1,0 +1,49 @@
+model Categorie {
+  id       Int      @id @default(autoincrement())
+  libelle  String   @unique @db.VarChar(50)
+
+  produits Produit[]
+
+  @@map("categorie")
+}
+
+model Fournisseur {
+  id        Int      @id @default(autoincrement())
+  nom       String   @db.VarChar(100)
+  telephone String   @db.VarChar(20)
+  email     String   @db.VarChar(100)
+  adresse   String   @db.VarChar(255)
+
+  produits       Produit[]
+  bonsLivraison  BonLivraison[]
+
+  @@map("fournisseur")
+}
+
+model Produit {
+  id            Int      @id @default(autoincrement())
+  designation   String   @db.VarChar(150)
+  marque        String   @db.VarChar(50)
+  modele        String   @db.VarChar(50)
+  couleur       String?  @db.VarChar(30)
+  traitement    String?  @db.VarChar(50)
+  indice        Decimal? @db.Decimal(3, 2)
+  codeBarre     String   @unique @db.VarChar(50) @map("code_barre")
+  prixAchat     Decimal  @db.Decimal(10, 2) @map("prix_achat")
+  prixVente     Decimal  @db.Decimal(10, 2) @map("prix_vente")
+  stockActuel   Int      @map("stock_actuel")
+  stockMinimum  Int      @map("stock_minimum")
+  imageUrl      String?  @db.VarChar(255) @map("image_url")
+
+  categorieId   Int      @map("id_categorie")
+  categorie     Categorie @relation(fields: [categorieId], references: [id])
+
+  fournisseurId Int      @map("id_fournisseur")
+  fournisseur   Fournisseur @relation(fields: [fournisseurId], references: [id])
+
+  lignesBonLivraison LigneBonLivraison[]
+  lignesVente        LigneVente[]
+  lignesDevis        LigneDevis[]
+
+  @@map("produit")
+}

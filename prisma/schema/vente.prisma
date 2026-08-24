@@ -1,0 +1,36 @@
+model Vente {
+  id             Int      @id @default(autoincrement())
+  dateVente      DateTime @map("date_vente") @db.Date
+  montantTotal   Decimal  @db.Decimal(10, 2) @map("montant_total")
+  modePaiement   String   @db.VarChar(20) @map("mode_paiement")
+
+  clientId       Int      @map("id_client")
+  client         Client   @relation(fields: [clientId], references: [id])
+
+  utilisateurId  Int      @map("id_utilisateur")
+  utilisateur    Utilisateur @relation(fields: [utilisateurId], references: [id])
+
+  devisId        Int?     @unique @map("id_devis")
+  devis          Devis?   @relation(fields: [devisId], references: [id])
+
+  lignes         LigneVente[]
+  facture        Facture?
+
+  @@map("vente")
+}
+
+
+
+model LigneVente {
+  produitId    Int      @map("id_produit")
+  venteId      Int      @map("id_vente")
+  quantite     Int
+  prixUnitaire Decimal  @db.Decimal(10, 2) @map("prix_unitaire")
+  remise       Decimal  @db.Decimal(5, 2)
+
+  produit      Produit @relation(fields: [produitId], references: [id])
+  vente        Vente   @relation(fields: [venteId], references: [id])
+
+  @@id([produitId, venteId])
+  @@map("ligne_vente")
+}

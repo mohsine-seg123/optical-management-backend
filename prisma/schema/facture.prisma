@@ -1,0 +1,17 @@
+model Facture {
+  id                    Int      @id @default(autoincrement())
+  numeroFacture         String   @unique @db.VarChar(50) @map("numero_facture")
+  dateFacture           DateTime @map("date_facture") @db.Date
+  montantTotal          Decimal  @db.Decimal(10, 2) @map("montant_total")
+  partPatient           Decimal  @db.Decimal(10, 2) @map("part_patient")
+  partMutuelle          Decimal  @db.Decimal(10, 2) @map("part_mutuelle")
+  statutRemboursement   String   @db.VarChar(20) @map("statut_remboursement")
+
+  venteId               Int      @unique @map("id_vente")
+  vente                 Vente    @relation(fields: [venteId], references: [id])
+
+  mutuelleId            Int?     @map("id_mutuelle")
+  mutuelle              Mutuelle? @relation(fields: [mutuelleId], references: [id])
+
+  @@map("facture")
+}
