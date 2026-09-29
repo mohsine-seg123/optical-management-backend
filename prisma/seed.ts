@@ -1,6 +1,5 @@
 import "dotenv/config";
 import bcrypt from "bcrypt";
-import "dotenv/config"; // toujours en premier
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
