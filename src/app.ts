@@ -38,7 +38,7 @@ const limiter = rateLimit({
       cors({
         origin: [
           "http://localhost:5173",
-          "https://optic-crm-frontend-t927.vercel.app",
+          "https://optic-crm-frontend.vercel.app",
         ],
         credentials: true,
       }),
