@@ -34,12 +34,16 @@ const limiter = rateLimit({
 });
 
 // Middlewares globaux
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  }),
-);
+    app.use(
+      cors({
+        origin: [
+          "http://localhost:5173",
+          "https://optic-crm-frontend-t927.vercel.app",
+        ],
+        credentials: true,
+      }),
+    );
+
 app.use('/api',limiter);
 app.use(express.json());
 app.use(cookieParser());
