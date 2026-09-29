@@ -18,9 +18,15 @@ export const createAndSendToken = (
   res: Response,
 ): void => {
   const token = signToken(utilisateur.id, utilisateur.role);
+
   const cookieOptions = {
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    maxAge: 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === "production",
+    sameSite:
+      process.env.NODE_ENV === "production"
+        ? ("none" as const)
+        : ("lax" as const),
   };
 
   res.cookie("token", token, cookieOptions);
